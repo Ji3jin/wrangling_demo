@@ -1,8 +1,8 @@
-num,date
-,sdfsf
-,sdfsf
-1,01/03/1987
-2,01/03/1987
-3,
-4,sdfsf
-5,sdfsdf
+num,date,float
+,sdfsf,0.23
+,sdfsf,0.324
+1,01/03/1987,0.23
+2,01/03/1987,0.345
+3,,
+4,sdfsf,1.23
+5,sdfsdf,4.23

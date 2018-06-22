@@ -3,24 +3,10 @@ import os
 from ConfigParser import RawConfigParser
 import glob
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
-def singleton(cls, *args, **kw):
-    instances = {}
-
-    def _singleton(*args, **kw):
-        if cls not in instances:
-            instances[cls] = cls(*args, **kw)
-        return instances[cls]
-
-    return _singleton
-
-
-@singleton
 class RuleLoader:
-    def __init__(self):
-        for item in glob.glob(os.path.join(BASE_DIR, 'conf', "*.conf")):
+    def __init__(self, conf_path):
+        for item in glob.glob(os.path.join(conf_path, "*.conf")):
             self.cp = RawConfigParser()
             self.cp.read(item)
 

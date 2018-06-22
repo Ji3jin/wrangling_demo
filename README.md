@@ -71,4 +71,83 @@ dtype: object
 num     NaN    NaN           1           2    3      4       5
 date  sdfsf  sdfsf  01/03/1987  01/03/1987  NaN  sdfsf  sdfsdf
 
+>>> import pandas as pd
+>>> df = pd.read_csv('test.csv')
+>>> df
+   num        date  float
+0  NaN       sdfsf  0.230
+1  NaN       sdfsf  0.324
+2  1.0  01/03/1987  0.230
+3  2.0  01/03/1987  0.345
+4  3.0         NaN    NaN
+5  4.0       sdfsf  1.230
+6  5.0      sdfsdf  4.230
+>>> from wrangling_core import wrangling_df
+>>> from wrangling_core import rule_loader
+>>> rule = rule_loader.RuleLoader('conf/')
+>>> wl_df = wrangling_df.WrangLingDF(rule,df)
+num      float64
+date      object
+float    float64
+dtype: object
+wrangling_core/wrangling_df.py:67: UserWarning: This pattern has match groups. To actually get the groups, use str.extract.
+  right_value = self._dataframe[item].str.contains(regex, regex=True)
+
+>>> ops = wl_df.get_recommend_operation((2,0))
+当前选择的操作对象索引为(2,0)，该对象为行级操作
+>>> for item in ops:
+...     print item
+...
+drop--|--drop the checked row
+dropna--|--drop the row has nan value
+>>> wl_df.extract_dataframe(ops[1])
+num      float64
+date      object
+float    float64
+dtype: object
+>>> wl_df.dataframe
+   num        date  float
+2  1.0  01/03/1987  0.230
+3  2.0  01/03/1987  0.345
+5  4.0       sdfsf  1.230
+6  5.0      sdfsdf  4.230
+
+>>> ops = wl_df.get_recommend_operation((0,1))
+当前选择的操作对象索引为(0,1)，该对象为列级操作
+>>> for item in ops:
+...     print item
+...
+drop--|--drop the checked column
+dropna--|--drop the column has nan value
+set_index--|--set the checked column as index
+groupby--|--group by the checked column
+sort_values--|--sort by the checked column desc
+>>> wl_df.extract_dataframe(ops[2])
+date      object
+float    float64
+dtype: object
+>>> wl_df.dataframe
+           date  float
+num
+1.0  01/03/1987  0.230
+2.0  01/03/1987  0.345
+4.0       sdfsf  1.230
+5.0      sdfsdf  4.230
+>>> ops = wl_df.get_recommend_operation((0,0))
+当前选择的操作对象索引为(0,0)，该对象为表级操作
+>>> for item in ops:
+...     print item
+
+>>> wl_df.extract_dataframe(ops[1])
+>>> wl_df.dataframe
+num           1.0         2.0    4.0     5.0
+date   01/03/1987  01/03/1987  sdfsf  sdfsdf
+float        0.23       0.345   1.23    4.23
+>>> wl_df.get_code()
+dropna--|--drop the row has nan value
+set_index--|--set the checked column as index
+T--|--convert table
+>>>
+
+
 ```

@@ -11,10 +11,31 @@ class DataType(Enum):
 
 
 @unique
-class ObjType(Enum):
-    ROW = 0
-    COLUMN = 1
-    CELL = 2
+class OperationType(Enum):
+    ROW = 'row'
+    COLUMN = 'column'
+    CELL = 'cell'
+    DEFAULT = 'table'
 
 
-CHECK_TYPE = ((DataType.NUM,'int64'), (DataType.FLOAT,'float64'))
+def get_op_type(op_index):
+    x_index = op_index[0]
+    y_index = op_index[1]
+    if x_index == 0 and y_index == 0:
+        return OperationType.DEFAULT
+    elif x_index == 0:
+        return OperationType.COLUMN
+    elif y_index == 0:
+        return OperationType.ROW
+    else:
+        return OperationType.CELL
+
+
+def get_axis(attr_name):
+    if attr_name in AXIS_ATTR:
+        return True
+
+
+CHECK_TYPE = ((DataType.NUM, 'int64'), (DataType.FLOAT, 'float64'))
+
+AXIS_ATTR = ("drop","dropna")
